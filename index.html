@@ -66,6 +66,14 @@
   </script>
 
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -85,15 +93,24 @@
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-style: preserve-3d;
     }
 
     .glass-card-hover {
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .glass-card-hover:hover {
-      transform: translateY(-8px) scale(1.015);
-      border-color: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 153, 0, 0.15);
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 153, 0, 0.25);
+    }
+
+    /* 3D Visualizer Canvas Container */
+    .canvas-3d-wrapper {
+      position: relative;
+      perspective: 1200px;
+      transform-style: preserve-3d;
     }
 
     .glass-nav {
@@ -714,40 +731,83 @@
       <!-- Chart Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         
-        <!-- Chart 1: Headline Growth Signals -->
-        <div class="glass-card rounded-3xl p-6 lg:p-8 border-white/10" data-tilt data-tilt-max="3">
+        <!-- Chart 1: Interactive 3D Bar Chart (WebGL Three.js 3D Bars) -->
+        <div class="glass-card rounded-3xl p-6 lg:p-8 border-white/10 relative overflow-hidden" data-tilt data-tilt-max="4">
           <div class="flex items-center justify-between mb-4">
             <div>
-              <h3 class="text-xl font-display font-bold text-white">Chart 1: Reported Growth Signals</h3>
-              <p class="text-xs text-slate-400">Percentage growth each platform chose to highlight for 2026</p>
+              <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold uppercase tracking-wider text-amber-400 mb-1">
+                <i class="fa-solid fa-cube text-xs"></i>
+                <span>Interactive 3D Bar Chart</span>
+              </div>
+              <h3 class="text-xl font-display font-bold text-white">Reported Growth Signals</h3>
+              <p class="text-xs text-slate-400">Drag & move cursor to inspect 3D bar depths</p>
             </div>
-            <div class="flex items-center space-x-2 text-xs">
-              <span class="inline-flex items-center text-amber-400"><span class="w-3 h-3 rounded-sm bg-amber-500 mr-1"></span> Amazon</span>
-              <span class="inline-flex items-center text-blue-400"><span class="w-3 h-3 rounded-sm bg-blue-500 mr-1"></span> Flipkart</span>
+            <div class="flex items-center space-x-3 text-xs">
+              <span class="inline-flex items-center text-amber-400 font-semibold"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 mr-1.5 shadow-sm shadow-amber-500"></span> Amazon</span>
+              <span class="inline-flex items-center text-blue-400 font-semibold"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 mr-1.5 shadow-sm shadow-blue-500"></span> Flipkart</span>
             </div>
           </div>
-          <div class="relative h-72 w-full">
-            <canvas id="growthSignalsChart"></canvas>
+
+          <!-- 3D WebGL Canvas for 3D Bar Columns -->
+          <div class="relative h-72 w-full rounded-2xl overflow-hidden bg-slate-950/80 border border-white/5 group">
+            <canvas id="bars3dCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+            <div class="absolute bottom-2 right-3 text-[10px] font-mono text-slate-400/80 pointer-events-none bg-slate-900/60 px-2 py-0.5 rounded">
+              <i class="fa-solid fa-arrows-up-down-left-right mr-1"></i> Interactive 3D Perspective
+            </div>
           </div>
-          <div class="mt-4 p-3 rounded-xl bg-white/5 text-xs text-slate-300">
-            <strong>Key Insight:</strong> Amazon's disclosures max out at +100% (Units & Seller Volume), while Flipkart chose to highlight niche vertical velocity (+48% Gen Z Beauty).
+
+          <!-- Label Breakdown -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 text-[11px]">
+            <div class="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <span class="text-slate-400 block truncate">Amazon Orders</span>
+              <span class="text-amber-400 font-bold text-sm">+100% YoY</span>
+            </div>
+            <div class="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <span class="text-slate-400 block truncate">Seller Units 24h</span>
+              <span class="text-amber-400 font-bold text-sm">+100% YoY</span>
+            </div>
+            <div class="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <span class="text-slate-400 block truncate">Sellers &gt; ₹1 Cr</span>
+              <span class="text-amber-400 font-bold text-sm">+80% YoY</span>
+            </div>
+            <div class="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <span class="text-slate-400 block truncate">Android Premium</span>
+              <span class="text-amber-400 font-bold text-sm">+70% YoY</span>
+            </div>
+            <div class="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+              <span class="text-slate-400 block truncate">Gen Z Beauty</span>
+              <span class="text-blue-400 font-bold text-sm">+48% YoY</span>
+            </div>
+            <div class="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+              <span class="text-slate-400 block truncate">Flipkart Beauty</span>
+              <span class="text-blue-400 font-bold text-sm">+42% YoY</span>
+            </div>
           </div>
         </div>
 
-        <!-- Chart 2: How Far Above a Normal Day -->
-        <div class="glass-card rounded-3xl p-6 lg:p-8 border-white/10" data-tilt data-tilt-max="3">
+        <!-- Chart 2: Futuristic Floating Polar Area / Multiples Chart -->
+        <div class="glass-card rounded-3xl p-6 lg:p-8 border-white/10 relative overflow-hidden" data-tilt data-tilt-max="4">
           <div class="flex items-center justify-between mb-4">
             <div>
-              <h3 class="text-xl font-display font-bold text-white">Chart 2: Multiple of a Normal Day</h3>
-              <p class="text-xs text-slate-400">Order surge vs GMV value surge across first 2 days (Redseer data)</p>
+              <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-1">
+                <i class="fa-solid fa-chart-pie text-xs"></i>
+                <span>Radial Metric Breakdown</span>
+              </div>
+              <h3 class="text-xl font-display font-bold text-white">Multiples Above Normal Day</h3>
+              <p class="text-xs text-slate-400">Order surge (14x) vs GMV value (6x) baseline multiplier</p>
             </div>
-            <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-mono">Base: 1x BAU</span>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800/90 text-emerald-400 border border-emerald-500/30 font-mono font-bold">1x = BAU</span>
           </div>
-          <div class="relative h-72 w-full">
+
+          <div class="relative h-72 w-full flex items-center justify-center">
             <canvas id="normalDayMultiplesChart"></canvas>
           </div>
-          <div class="mt-4 p-3 rounded-xl bg-white/5 text-xs text-slate-300">
-            <strong>Key Insight:</strong> Orders jumped to <strong>14x normal</strong>, but GMV value rose by <strong>6x</strong>. Consumers purchased many more, lower-ticket and impulse items.
+
+          <div class="mt-4 p-3 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 border border-white/10 text-xs text-slate-300 flex items-center justify-between">
+            <div>
+              <strong>Order Velocity Divergence:</strong> Orders jumped to <span class="text-blue-400 font-bold">14x BAU</span> while GMV grew <span class="text-amber-400 font-bold">6x</span>.
+            </div>
+            <i class="fa-solid fa-bolt-lightning text-amber-400 text-base ml-2"></i>
           </div>
         </div>
 
@@ -1122,131 +1182,211 @@
     Chart.defaults.color = '#94a3b8';
     Chart.defaults.font.family = '"Plus Jakarta Sans", sans-serif';
 
-    // Chart 1: Growth Signals Horizontal Bar
-    const ctx1 = document.getElementById('growthSignalsChart').getContext('2d');
-    new Chart(ctx1, {
-      type: 'bar',
-      data: {
-        labels: [
-          'Amazon: Products Ordered YoY',
-          'Amazon: Seller Units (First 24h) YoY',
-          'Amazon: Sellers > ₹1 Cr YoY',
-          'Amazon: Premium Android Phones YoY',
-          'Flipkart: Beauty (Gen Z Shoppers)',
-          'Flipkart: Beauty (Overall Category)'
-        ],
-        datasets: [{
-          label: 'Published Growth Metric (%)',
-          data: [100, 100, 80, 70, 48, 42],
-          backgroundColor: [
-            'rgba(255, 153, 0, 0.85)',
-            'rgba(255, 153, 0, 0.85)',
-            'rgba(255, 153, 0, 0.7)',
-            'rgba(255, 153, 0, 0.7)',
-            'rgba(40, 116, 240, 0.85)',
-            'rgba(40, 116, 240, 0.7)'
-          ],
-          borderColor: [
-            '#FF9900',
-            '#FF9900',
-            '#FFB84D',
-            '#FFB84D',
-            '#2874F0',
-            '#60A5FA'
-          ],
-          borderWidth: 1.5,
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#0f172a',
-            titleColor: '#fff',
-            bodyColor: '#cbd5e1',
-            borderColor: '#334155',
-            borderWidth: 1,
-            padding: 12,
-            callbacks: {
-              label: function(context) {
-                return ` Growth Claim: +${context.raw}%`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: {
-              callback: value => `+${value}%`
-            },
-            max: 120
-          },
-          y: {
-            grid: { display: false },
-            ticks: { font: { size: 11, weight: '600' } }
-          }
-        }
+    // -------------------------------------------------------------
+    // 2. INTERACTIVE 3D WEBGL BAR CHART (CHART 1)
+    // -------------------------------------------------------------
+    const canvas3D = document.getElementById('bars3dCanvas');
+    const scene3D = new THREE.Scene();
+    const camera3D = new THREE.PerspectiveCamera(45, canvas3D.clientWidth / canvas3D.clientHeight, 0.1, 100);
+    const renderer3D = new THREE.WebGLRenderer({ canvas: canvas3D, alpha: true, antialias: true });
+
+    renderer3D.setSize(canvas3D.clientWidth, canvas3D.clientHeight);
+    renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer3D.shadowMap.enabled = true;
+
+    // Lights for 3D Bar Chart
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene3D.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight.position.set(5, 12, 10);
+    scene3D.add(dirLight);
+
+    const pointLightAmazon = new THREE.PointLight(0xff9900, 1.2, 20);
+    pointLightAmazon.position.set(-4, 6, 4);
+    scene3D.add(pointLightAmazon);
+
+    const pointLightFlipkart = new THREE.PointLight(0x2874f0, 1.2, 20);
+    pointLightFlipkart.position.set(4, 6, 4);
+    scene3D.add(pointLightFlipkart);
+
+    // 3D Grid Platform
+    const gridHelper = new THREE.GridHelper(16, 12, 0xff9900, 0x1e293b);
+    gridHelper.position.y = -0.05;
+    scene3D.add(gridHelper);
+
+    // Data for 3D Bars: [Value, Color, Brand]
+    const barData = [
+      { val: 100, color: 0xff9900 }, // Amazon Products
+      { val: 100, color: 0xffaa22 }, // Amazon Seller Units
+      { val: 80,  color: 0xffb84d }, // Amazon > 1Cr
+      { val: 70,  color: 0xffc470 }, // Amazon Android Premium
+      { val: 48,  color: 0x3b82f6 }, // Flipkart Beauty GenZ
+      { val: 42,  color: 0x2874f0 }  // Flipkart Beauty Overall
+    ];
+
+    const barsGroup = new THREE.Group();
+    const barMeshes = [];
+    const spacing = 1.9;
+    const startX = -((barData.length - 1) * spacing) / 2;
+
+    barData.forEach((item, index) => {
+      const height = (item.val / 100) * 4.5;
+      const geom = new THREE.BoxGeometry(1.1, height, 1.1);
+      
+      // Beveled styling via materials
+      const mat = new THREE.MeshStandardMaterial({
+        color: item.color,
+        roughness: 0.25,
+        metalness: 0.45,
+        emissive: item.color,
+        emissiveIntensity: 0.15
+      });
+
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.position.x = startX + index * spacing;
+      mesh.position.y = height / 2;
+      mesh.position.z = 0;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+
+      // Animate from bottom
+      mesh.scale.y = 0.01;
+      barsGroup.add(mesh);
+      barMeshes.push({ mesh, targetHeight: 1, currentScale: 0.01 });
+    });
+
+    scene3D.add(barsGroup);
+
+    camera3D.position.set(0, 5.5, 11);
+    camera3D.lookAt(0, 2, 0);
+
+    // Interactive Drag / Orbit around 3D Bar Chart
+    let isDraggingBar = false;
+    let prevMouseX = 0;
+    let targetRotationY = -0.2;
+    let targetRotationX = 0.1;
+
+    canvas3D.addEventListener('mousedown', (e) => {
+      isDraggingBar = true;
+      prevMouseX = e.clientX;
+    });
+
+    window.addEventListener('mouseup', () => isDraggingBar = false);
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingBar) {
+        const deltaX = e.clientX - prevMouseX;
+        targetRotationY += deltaX * 0.008;
+        prevMouseX = e.clientX;
       }
     });
 
-    // Chart 2: How Far Above Normal Day
+    // Touch support for mobile 3D interaction
+    canvas3D.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        targetRotationY += 0.02;
+      }
+    });
+
+    function animate3DBars() {
+      requestAnimationFrame(animate3DBars);
+
+      // Smooth rotation interpolation
+      barsGroup.rotation.y += (targetRotationY - barsGroup.rotation.y) * 0.05;
+      barsGroup.rotation.x += (targetRotationX - barsGroup.rotation.x) * 0.05;
+
+      // Grow bar animations
+      barMeshes.forEach(b => {
+        if (b.currentScale < b.targetHeight) {
+          b.currentScale += 0.035;
+          b.mesh.scale.y = Math.min(b.currentScale, b.targetHeight);
+        }
+      });
+
+      renderer3D.render(scene3D, camera3D);
+    }
+    animate3DBars();
+
+    window.addEventListener('resize', () => {
+      if (canvas3D.clientWidth > 0 && canvas3D.clientHeight > 0) {
+        camera3D.aspect = canvas3D.clientWidth / canvas3D.clientHeight;
+        camera3D.updateProjectionMatrix();
+        renderer3D.setSize(canvas3D.clientWidth, canvas3D.clientHeight);
+      }
+    });
+
+    // -------------------------------------------------------------
+    // 3. CHART 2: MODERN POLAR AREA CHART (How Far Above Normal Day)
+    // -------------------------------------------------------------
     const ctx2 = document.getElementById('normalDayMultiplesChart').getContext('2d');
     new Chart(ctx2, {
-      type: 'bar',
+      type: 'polarArea',
       data: {
         labels: [
-          'All Platforms: Orders Volume',
-          'All Platforms: Gross GMV Value',
-          'Quick Commerce: Sector GMV',
-          'Fashion Sector: GMV',
-          'Flipkart Minutes: Order Multiple'
+          'Orders Volume (14x)',
+          'Gross GMV (6x)',
+          'Quick Comm GMV (4.5x)',
+          'Fashion GMV (4x)',
+          'Minutes Orders (3.5x)'
         ],
         datasets: [{
-          label: 'Multiple of Regular Day (BAU = 1x)',
           data: [14.0, 6.0, 4.5, 4.0, 3.5],
           backgroundColor: [
-            'rgba(59, 130, 246, 0.85)',
-            'rgba(245, 158, 11, 0.85)',
-            'rgba(16, 185, 129, 0.85)',
-            'rgba(168, 85, 247, 0.85)',
-            'rgba(236, 72, 153, 0.85)'
+            'rgba(59, 130, 246, 0.75)',
+            'rgba(245, 158, 11, 0.75)',
+            'rgba(16, 185, 129, 0.75)',
+            'rgba(168, 85, 247, 0.75)',
+            'rgba(236, 72, 153, 0.75)'
           ],
-          borderRadius: 8,
-          borderWidth: 1.5,
-          borderColor: 'rgba(255, 255, 255, 0.2)'
+          borderColor: [
+            '#60a5fa',
+            '#f59e0b',
+            '#10b981',
+            '#a855f7',
+            '#ec4899'
+          ],
+          borderWidth: 2
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+          animateRotate: true,
+          animateScale: true,
+          duration: 1500,
+          easing: 'easeOutQuart'
+        },
+        scales: {
+          r: {
+            grid: { color: 'rgba(255, 255, 255, 0.08)' },
+            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+            ticks: {
+              display: false,
+              stepSize: 3,
+              backdropColor: 'transparent'
+            }
+          }
+        },
         plugins: {
-          legend: { display: false },
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#cbd5e1',
+              font: { size: 10, weight: '600' },
+              padding: 12,
+              usePointStyle: true
+            }
+          },
           tooltip: {
             backgroundColor: '#0f172a',
             padding: 12,
             callbacks: {
               label: function(context) {
-                return ` Multiple: ${context.raw}x normal day`;
+                return ` Magnitude: ${context.raw}x Normal Business Day`;
               }
             }
-          }
-        },
-        scales: {
-          y: {
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: {
-              callback: value => `${value}x`
-            },
-            max: 16
-          },
-          x: {
-            grid: { display: false },
-            ticks: { font: { size: 11 } }
           }
         }
       }
