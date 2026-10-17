@@ -33,33 +33,8 @@ An interactive, high-performance case study web application analyzing the **₹1
 
 ---
 
-## 💻 How to Run Locally
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/<your-username>/<repo-name>.git
-   cd <repo-name>
-   ```
 
-2. Open `index.html` in any modern web browser:
-   - On Windows: Double click `index.html` or run:
-     ```powershell
-     Start-Process index.html
-     ```
-   - Or use VS Code Live Server / any static file server:
-     ```bash
-     npx serve .
-     ```
-
----
-
-## 🌐 Deploy to GitHub Pages (Free)
-
-1. Go to your repository on GitHub.
-2. Navigate to **Settings** > **Pages** (under Code and automation).
-3. Under **Branch**, select `main` (or `master`) and folder `/ (root)`.
-4. Click **Save**.
-5. Your website will be live at `https://<your-username>.github.io/<repo-name>/` in ~1-2 minutes!
 
 ---
 
