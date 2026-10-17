@@ -191,40 +191,47 @@
 <body class="bg-mesh text-slate-100 font-sans selection:bg-amber-500 selection:text-black overflow-x-hidden antialiased min-h-screen">
 
   <!-- Floating Nav Bar -->
-  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300" id="main-nav">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-600 to-blue-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
-          <i class="fa-solid fa-bolt-lightning text-white text-lg"></i>
+  <nav class="fixed top-3 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6" id="main-nav">
+    <div class="max-w-7xl mx-auto h-16 sm:h-20 px-5 sm:px-8 rounded-2xl glass-nav flex items-center justify-between border border-white/10 shadow-2xl shadow-black/80">
+      
+      <!-- Logo Branding -->
+      <a href="#" class="flex items-center space-x-3 group shrink-0">
+        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-blue-600 flex items-center justify-center shadow-lg shadow-amber-500/25 group-hover:scale-105 group-hover:shadow-amber-500/40 transition-all duration-300">
+          <i class="fa-solid fa-scale-balanced text-white text-base sm:text-lg"></i>
         </div>
-        <div>
-          <span class="font-display font-bold text-lg tracking-wider text-white">FESTIVE CLASH '26</span>
-          <span class="text-xs block text-slate-400 font-medium tracking-widest uppercase">Amazon GIF vs Flipkart BBD</span>
+        <div class="whitespace-nowrap">
+          <span class="font-display font-extrabold text-base sm:text-lg tracking-wider text-white group-hover:text-amber-400 transition-colors block leading-tight">
+            FESTIVE CLASH '26
+          </span>
+          <span class="text-[10px] block text-slate-400 font-medium tracking-widest uppercase leading-tight">
+            Amazon GIF vs Flipkart BBD
+          </span>
         </div>
+      </a>
+
+      <!-- Desktop Links with Hover Pill Indicator -->
+      <div class="hidden lg:flex items-center space-x-1 text-xs sm:text-sm font-semibold text-slate-300 bg-white/[0.03] p-1.5 rounded-full border border-white/5">
+        <a href="#overview" class="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all">Overview</a>
+        <a href="#market" class="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all">Market Scale</a>
+        <a href="#strategies" class="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all">Strategies</a>
+        <a href="#comparison" class="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all">Head-to-Head</a>
+        <a href="#charts" class="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all">Data &amp; Charts</a>
+        <a href="#takeaways" class="hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all">Takeaways</a>
       </div>
 
-      <!-- Desktop Links -->
-      <div class="hidden md:flex items-center space-x-1 lg:space-x-6 text-sm font-medium text-slate-300">
-        <a href="#overview" class="hover:text-amber-400 px-3 py-2 transition-colors">Overview</a>
-        <a href="#market" class="hover:text-amber-400 px-3 py-2 transition-colors">Market Scale</a>
-        <a href="#strategies" class="hover:text-amber-400 px-3 py-2 transition-colors">Strategies</a>
-        <a href="#comparison" class="hover:text-amber-400 px-3 py-2 transition-colors">Head-to-Head</a>
-        <a href="#charts" class="hover:text-amber-400 px-3 py-2 transition-colors">Data & Charts</a>
-        <a href="#takeaways" class="hover:text-amber-400 px-3 py-2 transition-colors">Key Takeaways</a>
-      </div>
-
-      <!-- Action Button & Theme/Share -->
+      <!-- Action Buttons -->
       <div class="flex items-center space-x-3">
-        <div class="hidden sm:inline-flex items-center text-xs px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-medium">
+        <div class="hidden sm:inline-flex items-center text-xs px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-medium shadow-sm shadow-emerald-950">
           <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-ping"></span> Live Case Analysis
         </div>
         <a href="#charts" class="relative group overflow-hidden rounded-xl p-[1px] focus:outline-none">
           <span class="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-500 to-blue-500 group-hover:scale-105 transition-transform duration-300"></span>
-          <span class="relative block px-4 py-2 text-xs uppercase tracking-wider font-bold bg-gray-900 rounded-[11px] group-hover:bg-opacity-80 transition duration-200">
+          <span class="relative block px-4 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-xs uppercase tracking-wider font-bold bg-gray-950 text-white rounded-[11px] group-hover:bg-opacity-80 transition duration-200 shadow-md">
             Explore 3D Charts
           </span>
         </a>
       </div>
+
     </div>
   </nav>
 
@@ -891,24 +898,52 @@
               A 1-to-5 analytical evaluation of market presence across eight strategic battlegrounds. Toggle and inspect how both platforms achieve symmetry in quick-commerce while diverging on audience and premiumisation.
             </p>
 
+            <!-- Interactive Filter Toggle Pills -->
+            <div class="flex items-center space-x-2 mb-6" id="radar-toggle-controls">
+              <button id="radar-view-both" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all flex items-center space-x-1.5 active">
+                <span>Both</span>
+              </button>
+              <button id="radar-view-amazon" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 transition-all flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span>Amazon Focus</span>
+              </button>
+              <button id="radar-view-flipkart" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:bg-blue-500/20 transition-all flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                <span>Flipkart Focus</span>
+              </button>
+            </div>
+
             <div class="space-y-3">
-              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
-                <span class="text-xs text-slate-300 font-semibold flex items-center">
-                  <span class="w-3 h-3 rounded-full bg-amber-500 mr-2"></span> Amazon Highest Dominance
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-amber-500/30 transition-all cursor-pointer group" onclick="highlightRadarDimension(0)">
+                <span class="text-xs text-slate-300 font-semibold flex items-center group-hover:text-amber-300 transition-colors">
+                  <span class="w-3 h-3 rounded-full bg-amber-500 mr-2 shadow-sm shadow-amber-500/50"></span> Amazon Highest Dominance
                 </span>
-                <span class="text-xs font-bold text-amber-400">Premium Electronics & Sellers (5.0/5)</span>
+                <span class="text-xs font-bold text-amber-400">Premium Electronics (5.0/5)</span>
               </div>
-              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
-                <span class="text-xs text-slate-300 font-semibold flex items-center">
-                  <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span> Flipkart Highest Dominance
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-blue-500/30 transition-all cursor-pointer group" onclick="highlightRadarDimension(6)">
+                <span class="text-xs text-slate-300 font-semibold flex items-center group-hover:text-blue-300 transition-colors">
+                  <span class="w-3 h-3 rounded-full bg-blue-500 mr-2 shadow-sm shadow-blue-500/50"></span> Flipkart Highest Dominance
                 </span>
-                <span class="text-xs font-bold text-blue-400">Gen Z, Fashion & Scale (5.0/5)</span>
+                <span class="text-xs font-bold text-blue-400">Gen Z &amp; Fashion (5.0/5)</span>
               </div>
-              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
-                <span class="text-xs text-slate-300 font-semibold flex items-center">
-                  <span class="w-3 h-3 rounded-full bg-emerald-500 mr-2"></span> Deadlock Parity
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-500/30 transition-all cursor-pointer group" onclick="highlightRadarDimension(3)">
+                <span class="text-xs text-slate-300 font-semibold flex items-center group-hover:text-emerald-300 transition-colors">
+                  <span class="w-3 h-3 rounded-full bg-emerald-500 mr-2 shadow-sm shadow-emerald-500/50"></span> Deadlock Parity
                 </span>
                 <span class="text-xs font-bold text-emerald-400">Quick Commerce Arms (4.0/5)</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Live Hover Inspector Card -->
+            <div id="radar-live-inspector" class="mt-5 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-blue-500/10 border border-white/10 transition-all duration-300">
+              <div class="text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-1 flex items-center justify-between">
+                <span>Active Hover Dimension</span>
+                <span id="inspector-dimension-name" class="text-amber-400 font-mono font-bold">Premium Electronics</span>
+              </div>
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-300">Amazon Score: <strong id="inspector-amazon-val" class="text-amber-400">5.0 / 5</strong></span>
+                <span class="text-slate-500">•</span>
+                <span class="text-slate-300">Flipkart Score: <strong id="inspector-flipkart-val" class="text-blue-400">4.0 / 5</strong></span>
               </div>
             </div>
           </div>
@@ -1339,66 +1374,93 @@
       }
     });
 
-    // Chart 3: Qualitative Radar Scorecard
+    // -------------------------------------------------------------
+    // 4. CHART 3: QUALITATIVE RADAR SCORECARD (HIGHLY INTERACTIVE)
+    // -------------------------------------------------------------
     const ctx3 = document.getElementById('scorecardRadarChart').getContext('2d');
-    new Chart(ctx3, {
+    const radarLabels = [
+      'Premium Electronics',
+      'Smartphone Deals',
+      'Fashion & Beauty',
+      'Quick Commerce',
+      'Seller Ecosystem',
+      'Tier-2/3 Reach',
+      'Gen Z Engagement',
+      'Traffic Concurrency'
+    ];
+    const amazonRadarData = [5, 4, 3, 4, 5, 5, 3, 4];
+    const flipkartRadarData = [4, 5, 5, 4, 3, 4, 5, 5];
+
+    const scorecardChart = new Chart(ctx3, {
       type: 'radar',
       data: {
-        labels: [
-          'Premium Electronics',
-          'Smartphone Deals',
-          'Fashion & Beauty',
-          'Quick Commerce',
-          'Seller Ecosystem',
-          'Tier-2/3 Reach',
-          'Gen Z Engagement',
-          'Traffic Concurrency'
-        ],
+        labels: radarLabels,
         datasets: [
           {
             label: 'Amazon GIF',
-            data: [5, 4, 3, 4, 5, 5, 3, 4],
-            backgroundColor: 'rgba(255, 153, 0, 0.25)',
+            data: amazonRadarData,
+            backgroundColor: 'rgba(255, 153, 0, 0.35)',
             borderColor: '#FF9900',
             pointBackgroundColor: '#FF9900',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointHoverBackgroundColor: '#ffffff',
             pointHoverBorderColor: '#FF9900',
-            borderWidth: 2
+            pointHoverRadius: 8,
+            pointRadius: 5,
+            borderWidth: 2.5,
+            tension: 0.35
           },
           {
             label: 'Flipkart BBD',
-            data: [4, 5, 5, 4, 3, 4, 5, 5],
-            backgroundColor: 'rgba(40, 116, 240, 0.25)',
+            data: flipkartRadarData,
+            backgroundColor: 'rgba(40, 116, 240, 0.35)',
             borderColor: '#2874F0',
             pointBackgroundColor: '#2874F0',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointHoverBackgroundColor: '#ffffff',
             pointHoverBorderColor: '#2874F0',
-            borderWidth: 2
+            pointHoverRadius: 8,
+            pointRadius: 5,
+            borderWidth: 2.5,
+            tension: 0.35
           }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        onHover: (event, activeElements) => {
+          if (activeElements.length > 0) {
+            const index = activeElements[0].index;
+            updateRadarInspector(index);
+          }
+        },
         elements: {
-          line: { tension: 0.2 }
+          line: { tension: 0.35 }
         },
         scales: {
           r: {
-            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-            grid: { color: 'rgba(255, 255, 255, 0.08)' },
+            angleLines: { color: 'rgba(255, 255, 255, 0.12)', lineWidth: 1.2 },
+            grid: { color: 'rgba(255, 255, 255, 0.08)', circular: true },
             pointLabels: {
-              font: { size: 11, weight: '600' },
-              color: '#e2e8f0'
+              font: { size: 12, weight: '700', family: '"Plus Jakarta Sans", sans-serif' },
+              color: '#e2e8f0',
+              backdropColor: 'transparent',
+              padding: 12
             },
             ticks: {
               backdropColor: 'transparent',
               color: '#64748b',
               stepSize: 1,
               min: 0,
-              max: 5
+              max: 5,
+              font: { size: 10 }
             }
           }
         },
@@ -1406,12 +1468,87 @@
           legend: {
             position: 'top',
             labels: {
-              color: '#cbd5e1',
-              font: { weight: 'bold' }
+              color: '#f8fafc',
+              font: { weight: 'bold', size: 12 },
+              padding: 16,
+              usePointStyle: true,
+              pointStyle: 'rectRounded'
+            }
+          },
+          tooltip: {
+            backgroundColor: '#090d16',
+            borderColor: 'rgba(255, 255, 255, 0.2)',
+            borderWidth: 1,
+            titleColor: '#ffffff',
+            titleFont: { size: 13, weight: 'bold' },
+            bodyColor: '#cbd5e1',
+            padding: 14,
+            boxPadding: 6,
+            callbacks: {
+              label: function(context) {
+                return ` ${context.dataset.label}: ${context.raw}.0 / 5 Score`;
+              }
             }
           }
         }
       }
+    });
+
+    // Radar Live Inspector Helper
+    function updateRadarInspector(index) {
+      const dimName = radarLabels[index];
+      const amz = amazonRadarData[index];
+      const fpk = flipkartRadarData[index];
+
+      document.getElementById('inspector-dimension-name').innerText = dimName;
+      document.getElementById('inspector-amazon-val').innerText = `${amz}.0 / 5`;
+      document.getElementById('inspector-flipkart-val').innerText = `${fpk}.0 / 5`;
+    }
+
+    // Programmatic highlight dimension function
+    window.highlightRadarDimension = function(index) {
+      updateRadarInspector(index);
+      scorecardChart.setActiveElements([
+        { datasetIndex: 0, index: index },
+        { datasetIndex: 1, index: index }
+      ]);
+      scorecardChart.tooltip.setActiveElements([
+        { datasetIndex: 0, index: index },
+        { datasetIndex: 1, index: index }
+      ]);
+      scorecardChart.update();
+    };
+
+    // Toggle Filters: Both, Amazon Focus, Flipkart Focus
+    const btnBoth = document.getElementById('radar-view-both');
+    const btnAmz = document.getElementById('radar-view-amazon');
+    const btnFpk = document.getElementById('radar-view-flipkart');
+
+    function resetRadarButtons() {
+      [btnBoth, btnAmz, btnFpk].forEach(btn => {
+        btn.classList.remove('active', 'bg-white/20', 'border-white/40');
+      });
+    }
+
+    btnBoth.addEventListener('click', () => {
+      resetRadarButtons();
+      btnBoth.classList.add('active', 'bg-white/20');
+      scorecardChart.show(0);
+      scorecardChart.show(1);
+    });
+
+    btnAmz.addEventListener('click', () => {
+      resetRadarButtons();
+      btnAmz.classList.add('active', 'bg-white/20');
+      scorecardChart.show(0);
+      scorecardChart.hide(1);
+    });
+
+    btnFpk.addEventListener('click', () => {
+      resetRadarButtons();
+      btnFpk.classList.add('active', 'bg-white/20');
+      scorecardChart.hide(0);
+      scorecardChart.show(1);
     });
 
     // -------------------------------------------------------------
