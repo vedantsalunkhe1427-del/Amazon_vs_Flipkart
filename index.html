@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon GIF vs Flipkart BBD: 2026 Festive E-Commerce Battle</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js & Three.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- GSAP for smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- Vanilla Tilt for 3D card tilt effects -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              amazon: '#FF9900',
+              amazonDark: '#131921',
+              flipkart: '#2874F0',
+              flipkartYellow: '#FFD700',
+              quickCommerce: '#10B981',
+              neonPurple: '#8B5CF6'
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 3s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+            glow: {
+              '0%': { opacity: 0.4, filter: 'drop-shadow(0 0 15px rgba(255, 153, 0, 0.3))' },
+              '100%': { opacity: 0.9, filter: 'drop-shadow(0 0 35px rgba(40, 116, 240, 0.6))' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #FF9900, #2874F0);
+      border-radius: 9999px;
+    }
+
+    /* Glassmorphism Classes */
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .glass-card-hover {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-8px) scale(1.015);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 153, 0, 0.15);
+    }
+
+    .glass-nav {
+      background: rgba(9, 13, 22, 0.82);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .gradient-text-amazon {
+      background: linear-gradient(135deg, #FFB84D 0%, #FF9900 60%, #E67A00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-text-flipkart {
+      background: linear-gradient(135deg, #60A5FA 0%, #2874F0 60%, #1E40AF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-clash {
+      background: linear-gradient(135deg, #FF9900 0%, #FFD700 35%, #00D2FF 70%, #2874F0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* 3D Canvas Background */
+    #hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Radial Gradients Background */
+    .bg-mesh {
+      background-color: #060911;
+      background-image: 
+        radial-gradient(at 10% 20%, rgba(255, 153, 0, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 10%, rgba(40, 116, 240, 0.14) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.08) 0px, transparent 60%),
+        radial-gradient(at 80% 90%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+        radial-gradient(at 20% 80%, rgba(255, 68, 68, 0.08) 0px, transparent 50%);
+    }
+
+    /* Animated interactive badge */
+    .glow-badge {
+      box-shadow: 0 0 20px rgba(255, 153, 0, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-mesh text-slate-100 font-sans selection:bg-amber-500 selection:text-black overflow-x-hidden antialiased min-h-screen">
+
+  <!-- Floating Nav Bar -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300" id="main-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-600 to-blue-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
+          <i class="fa-solid fa-bolt-lightning text-white text-lg"></i>
+        </div>
+        <div>
+          <span class="font-display font-bold text-lg tracking-wider text-white">FESTIVE CLASH '26</span>
+          <span class="text-xs block text-slate-400 font-medium tracking-widest uppercase">Amazon GIF vs Flipkart BBD</span>
+        </div>
+      </div>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center space-x-1 lg:space-x-6 text-sm font-medium text-slate-300">
+        <a href="#overview" class="hover:text-amber-400 px-3 py-2 transition-colors">Overview</a>
+        <a href="#market" class="hover:text-amber-400 px-3 py-2 transition-colors">Market Scale</a>
+        <a href="#strategies" class="hover:text-amber-400 px-3 py-2 transition-colors">Strategies</a>
+        <a href="#comparison" class="hover:text-amber-400 px-3 py-2 transition-colors">Head-to-Head</a>
+        <a href="#charts" class="hover:text-amber-400 px-3 py-2 transition-colors">Data & Charts</a>
+        <a href="#takeaways" class="hover:text-amber-400 px-3 py-2 transition-colors">Key Takeaways</a>
+      </div>
+
+      <!-- Action Button & Theme/Share -->
+      <div class="flex items-center space-x-3">
+        <div class="hidden sm:inline-flex items-center text-xs px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-ping"></span> Live Case Analysis
+        </div>
+        <a href="#charts" class="relative group overflow-hidden rounded-xl p-[1px] focus:outline-none">
+          <span class="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-500 to-blue-500 group-hover:scale-105 transition-transform duration-300"></span>
+          <span class="relative block px-4 py-2 text-xs uppercase tracking-wider font-bold bg-gray-900 rounded-[11px] group-hover:bg-opacity-80 transition duration-200">
+            Explore 3D Charts
+          </span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Interactive 3D Canvas & Stats -->
+  <section class="relative pt-32 pb-24 md:pt-44 md:pb-32 overflow-hidden flex items-center min-h-[92vh]">
+    <canvas id="hero-canvas"></canvas>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass-card text-xs font-semibold uppercase tracking-wider text-amber-400 border border-amber-500/30 mb-6">
+          <i class="fa-solid fa-sparkles text-amber-300"></i>
+          <span>Official 2026 Executive E-Commerce Report</span>
+        </div>
+        
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-display font-extrabold tracking-tight leading-tight sm:leading-none mb-6">
+          The <span class="gradient-clash">₹1.5 Lakh Crore</span> Indian Festive Showdown
+        </h1>
+        
+        <p class="text-base sm:text-lg md:text-xl text-slate-300 font-normal leading-relaxed">
+          Amazon's <span class="text-amber-400 font-semibold">Great Indian Festival</span> vs. Flipkart's <span class="text-blue-400 font-semibold">Big Billion Days</span>. An interactive, data-driven analysis of premiumisation vs Gen Z scale, sub-5 minute quick commerce deliveries, and multi-billion-dollar festive economics.
+        </p>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="#comparison" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold text-sm shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:-translate-y-1 transition duration-200 flex items-center space-x-2">
+            <span>Direct Comparison</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+          <a href="#scorecard" class="px-7 py-3.5 rounded-xl glass-card text-slate-200 hover:text-white font-semibold text-sm hover:border-slate-400/40 hover:-translate-y-1 transition duration-200 flex items-center space-x-2">
+            <i class="fa-solid fa-chart-radar text-amber-400"></i>
+            <span>Interactive Scorecard</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Stats Counter Row with 3D Tilt Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12" data-tilt-group>
+        
+        <!-- Stat 1 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 relative overflow-hidden group border-amber-500/20" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.2">
+          <div class="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
+          <div class="text-xs uppercase tracking-widest font-semibold text-amber-400 mb-2 flex items-center justify-between">
+            <span>Day 1-2 GMV</span>
+            <i class="fa-solid fa-coins text-amber-400"></i>
+          </div>
+          <div class="text-3xl lg:text-4xl font-display font-extrabold text-white mb-1 counter" data-target="24000">₹24,000 Cr</div>
+          <p class="text-xs text-slate-400">&gt; $2.5 Billion in 48 hours (~6x daily BAU rate)</p>
+        </div>
+
+        <!-- Stat 2 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 relative overflow-hidden group border-blue-500/20" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.2">
+          <div class="absolute -top-10 -right-10 w-28 h-28 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
+          <div class="text-xs uppercase tracking-widest font-semibold text-blue-400 mb-2 flex items-center justify-between">
+            <span>Order Velocity</span>
+            <i class="fa-solid fa-bolt text-blue-400"></i>
+          </div>
+          <div class="text-3xl lg:text-4xl font-display font-extrabold text-white mb-1">14x BAU</div>
+          <p class="text-xs text-slate-400">8-9 Crore orders placed across platforms</p>
+        </div>
+
+        <!-- Stat 3 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 relative overflow-hidden group border-emerald-500/20" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.2">
+          <div class="absolute -top-10 -right-10 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+          <div class="text-xs uppercase tracking-widest font-semibold text-emerald-400 mb-2 flex items-center justify-between">
+            <span>Quick Commerce</span>
+            <i class="fa-solid fa-truck-fast text-emerald-400"></i>
+          </div>
+          <div class="text-3xl lg:text-4xl font-display font-extrabold text-emerald-400 mb-1">12% Share</div>
+          <p class="text-xs text-slate-400">Surged from 8% in 2024 to 12% of festive sales</p>
+        </div>
+
+        <!-- Stat 4 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 relative overflow-hidden group border-purple-500/20" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.2">
+          <div class="absolute -top-10 -right-10 w-28 h-28 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
+          <div class="text-xs uppercase tracking-widest font-semibold text-purple-400 mb-2 flex items-center justify-between">
+            <span>Record Speed</span>
+            <i class="fa-solid fa-stopwatch text-purple-400"></i>
+          </div>
+          <div class="text-3xl lg:text-4xl font-display font-extrabold text-white mb-1">3.4 Mins</div>
+          <p class="text-xs text-slate-400">iPhone 17 ultra-fast doorstep delivery (Delhi)</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Timeline / Event Format at a Glance -->
+  <section id="overview" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs uppercase tracking-widest font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">The Calendar Clash</span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-4">Event Format at a Glance</h2>
+        <p class="text-slate-400 text-sm sm:text-base">Both e-commerce giants opened within 24 hours of each other to capture maximum consumer wallet share before Diwali.</p>
+      </div>
+
+      <!-- Comparative Timeline Card -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+        
+        <!-- Amazon GIF Card -->
+        <div class="glass-card rounded-3xl p-8 relative border-t-4 border-amber-500 hover:border-amber-400 transition-all duration-300" data-tilt data-tilt-max="5">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-3">
+              <span class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold text-xl border border-amber-500/30">
+                <i class="fa-brands fa-amazon"></i>
+              </span>
+              <div>
+                <h3 class="text-2xl font-display font-bold text-white">Amazon GIF</h3>
+                <p class="text-xs text-amber-400/80 font-medium">Great Indian Festival • Parent: Amazon Inc.</p>
+              </div>
+            </div>
+            <span class="text-xs px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 font-semibold">Wave Format</span>
+          </div>
+
+          <div class="space-y-4 text-sm text-slate-300 mb-8">
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-regular fa-calendar-check text-amber-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Launch Dates</strong>
+                <span>Prime Early Access: <strong>7 October</strong> | Public Start: <strong>8 October</strong></span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-regular fa-clock text-amber-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Duration Campaign</strong>
+                <span>Several weeks in synchronized waves lasting through Diwali (8 November)</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-solid fa-credit-card text-amber-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Financial Architecture</strong>
+                <span>Exclusive partner credit card & 0% EMI financing to support high-ticket AOV</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-solid fa-truck-ramp-box text-amber-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Quick Commerce Arm & Fashion</strong>
+                <span>Amazon Now live across <strong>120+ Indian cities</strong> with Amazon Fashion (in-house)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+            <div class="text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">Strategic Anchor</div>
+            <p class="text-xs text-slate-300">Premium upgrades, high seller margins, Prime subscriber retention, and large-basket electronics.</p>
+          </div>
+        </div>
+
+        <!-- Flipkart BBD Card -->
+        <div class="glass-card rounded-3xl p-8 relative border-t-4 border-blue-500 hover:border-blue-400 transition-all duration-300" data-tilt data-tilt-max="5">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-3">
+              <span class="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-xl border border-blue-500/30">
+                <i class="fa-solid fa-bag-shopping"></i>
+              </span>
+              <div>
+                <h3 class="text-2xl font-display font-bold text-white">Flipkart BBD</h3>
+                <p class="text-xs text-blue-400/80 font-medium">Big Billion Days • Parent: Walmart</p>
+              </div>
+            </div>
+            <span class="text-xs px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30 font-semibold">Flagship Sprint</span>
+          </div>
+
+          <div class="space-y-4 text-sm text-slate-300 mb-8">
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-regular fa-calendar-check text-blue-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Launch Dates</strong>
+                <span>Plus & Black VIP: <strong>8 October</strong> | Public Start: <strong>9 October</strong></span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-regular fa-clock text-blue-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Duration Campaign</strong>
+                <span>Main concentrated sprint: 9-18 October, followed by secondary Diwali sales</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-solid fa-credit-card text-blue-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Financial Architecture</strong>
+                <span>10% Instant discounts on Axis & ICICI bank cards with aggressive exchange bonus</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-white/5">
+              <i class="fa-solid fa-truck-ramp-box text-blue-400 mt-1"></i>
+              <div>
+                <strong class="text-white block">Quick Commerce Arm & Fashion</strong>
+                <span><strong>Flipkart Minutes</strong> scaling rapid hyper-local delivery + Myntra & Flipkart Fashion powerhouse</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-500/20">
+            <div class="text-xs font-semibold text-blue-300 uppercase tracking-wider mb-1">Strategic Anchor</div>
+            <p class="text-xs text-slate-300">Viral traffic concurrency, Gen Z lifestyle, Myntra-backed fashion supremacy, and rapid new customer acquisition.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Market Context & Dynamics -->
+  <section id="market" class="py-20 bg-slate-950/60 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs uppercase tracking-widest font-bold text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20">Redseer & Datum Insights</span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-4">Macro Market Intelligence</h2>
+        <p class="text-slate-400 text-sm sm:text-base">What the audited industry readings tell us about customer behavioral shifts across India's Tier 1, 2, and 3 heartlands.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Pillar 1 -->
+        <div class="glass-card rounded-2xl p-7 border-emerald-500/20 relative group hover:border-emerald-500/50 transition-all duration-300">
+          <div class="w-14 h-14 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mb-6">
+            <i class="fa-solid fa-users-viewfinder"></i>
+          </div>
+          <h3 class="text-xl font-display font-bold text-white mb-3">60-65 Million Shoppers in 48 Hours</h3>
+          <p class="text-slate-300 text-sm leading-relaxed mb-4">
+            First-time online shoppers doubled compared to 2025. Over 70% of festive visits for Amazon originated from Tier-2 and Tier-3 towns, proving e-commerce penetration has permanently decentralized beyond metros.
+          </p>
+          <div class="pt-4 border-t border-white/10 flex justify-between text-xs text-emerald-400 font-semibold">
+            <span>First-Time Shoppers</span>
+            <span>200% YoY (Doubled)</span>
+          </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="glass-card rounded-2xl p-7 border-amber-500/20 relative group hover:border-amber-500/50 transition-all duration-300">
+          <div class="w-14 h-14 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-6">
+            <i class="fa-solid fa-tv"></i>
+          </div>
+          <h3 class="text-xl font-display font-bold text-white mb-3">Electronics & Large Screen Dominance</h3>
+          <p class="text-slate-300 text-sm leading-relaxed mb-4">
+            Electronics & large appliances (notably massive 55-inch and 65-inch 4K TV upgrades) drove 25-27% of total market GMV. Smartphone sales alone constituted almost 30% of total festive expenditure according to Datum forecasts.
+          </p>
+          <div class="pt-4 border-t border-white/10 flex justify-between text-xs text-amber-400 font-semibold">
+            <span>Mobiles Share of GMV</span>
+            <span>~30% (₹45,000 Cr)</span>
+          </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="glass-card rounded-2xl p-7 border-blue-500/20 relative group hover:border-blue-500/50 transition-all duration-300">
+          <div class="w-14 h-14 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl mb-6">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <h3 class="text-xl font-display font-bold text-white mb-3">Fashion Explosion & 4-5x Quick Comm</h3>
+          <p class="text-slate-300 text-sm leading-relaxed mb-4">
+            Fashion captured 15-18% of GMV with a 22-25% YoY expansion. Meanwhile, quick-commerce arms recorded 4x-5x their regular business-as-usual GMV, transforming from grocery delivery into high-speed electronics & festive gifting hubs.
+          </p>
+          <div class="pt-4 border-t border-white/10 flex justify-between text-xs text-blue-400 font-semibold">
+            <span>Fashion YoY Growth</span>
+            <span>+22% to +25%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform In-Depth Case Studies -->
+  <section id="strategies" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-20">
+        <span class="text-xs uppercase tracking-widest font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">Deep Strategic Breakdown</span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-4">The Two Distinct Playbooks</h2>
+        <p class="text-slate-400 text-sm sm:text-base">Why neither platform is strictly "better" — they are competing for completely different customer mindshares.</p>
+      </div>
+
+      <!-- Amazon Detailed Case Box -->
+      <div class="mb-16 glass-card rounded-3xl p-8 lg:p-12 border-amber-500/30 relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col lg:flex-row gap-10 items-start">
+          <div class="lg:w-1/3">
+            <div class="inline-flex items-center space-x-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
+              <i class="fa-brands fa-amazon"></i>
+              <span>Playbook A: The Premiumisation Engine</span>
+            </div>
+            <h3 class="text-3xl font-display font-extrabold text-white mb-4">Amazon Great Indian Festival</h3>
+            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+              Amazon's core thesis revolves around Prime loyalty, high-trust premium electronics, and an empowering seller narrative. By prioritizing high-value average basket sizes, they capture the upper-tier consumer segment.
+            </p>
+            <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <span class="text-xs text-amber-300 font-bold block uppercase mb-1">Key Reading</span>
+              <p class="text-xs text-slate-300">A disciplined marriage of premium electronics demand, high seller revenue growth, and rapid expansion into Tier-2/3 via Amazon Now.</p>
+            </div>
+          </div>
+
+          <div class="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-amber-500/40 transition">
+              <div class="text-2xl font-extrabold text-amber-400 mb-1">+100% YoY</div>
+              <div class="text-sm font-semibold text-white mb-1">Products Ordered</div>
+              <p class="text-xs text-slate-400">Total units ordered doubled year-over-year in the first 24-hour wave.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-amber-500/40 transition">
+              <div class="text-2xl font-extrabold text-amber-400 mb-1">65x Normal Day</div>
+              <div class="text-sm font-semibold text-white mb-1">MacBook Neo Surge</div>
+              <p class="text-xs text-slate-400">High-end computing hardware exploded, alongside +70% premium Android phones.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-amber-500/40 transition">
+              <div class="text-2xl font-extrabold text-amber-400 mb-1">7 Pairs / Sec</div>
+              <div class="text-sm font-semibold text-white mb-1">Footwear Velocity</div>
+              <p class="text-xs text-slate-400">Nike sales ran at 16x regular run-rates with extreme impulse fashion velocity.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-amber-500/40 transition">
+              <div class="text-2xl font-extrabold text-amber-400 mb-1">80% Growth</div>
+              <div class="text-sm font-semibold text-white mb-1">Crorepati Sellers</div>
+              <p class="text-xs text-slate-400">Sellers grossing over ₹1 Crore grew >80%, with 2x seller units in 24 hours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flipkart Detailed Case Box -->
+      <div class="glass-card rounded-3xl p-8 lg:p-12 border-blue-500/30 relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col lg:flex-row gap-10 items-start">
+          <div class="lg:w-1/3">
+            <div class="inline-flex items-center space-x-2 text-blue-400 text-xs font-bold uppercase tracking-wider mb-3">
+              <i class="fa-solid fa-bag-shopping"></i>
+              <span>Playbook B: The Viral Scale & Youth Giant</span>
+            </div>
+            <h3 class="text-3xl font-display font-extrabold text-white mb-4">Flipkart Big Billion Days</h3>
+            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+              Flipkart treats BBD as a national cultural festival. Armed with Myntra's fashion dominance, unmatched smartphone volume deals, and extreme traffic spikes, it dominates youth culture and Gen Z buyers.
+            </p>
+            <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+              <span class="text-xs text-blue-300 font-bold block uppercase mb-1">Key Reading</span>
+              <p class="text-xs text-slate-300">Supreme concurrency engineering, youth grooming/beauty viral trends, and Flipkart Minutes leveraged as an aggressive new-user acquisition magnet.</p>
+            </div>
+          </div>
+
+          <div class="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-blue-500/40 transition">
+              <div class="text-2xl font-extrabold text-blue-400 mb-1">6.3 Million</div>
+              <div class="text-sm font-semibold text-white mb-1">Concurrent Peak Users / Min</div>
+              <p class="text-xs text-slate-400">Colossal server infrastructure managing over 6 million simultaneous active shoppers.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-blue-500/40 transition">
+              <div class="text-2xl font-extrabold text-blue-400 mb-1">+48% Gen Z</div>
+              <div class="text-sm font-semibold text-white mb-1">Beauty & Men's Grooming</div>
+              <p class="text-xs text-slate-400">Peak orders exceeded 1,600 units of men's perfume every 60 seconds.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-blue-500/40 transition">
+              <div class="text-2xl font-extrabold text-blue-400 mb-1">11x Surge</div>
+              <div class="text-sm font-semibold text-white mb-1">New Customers in Hour 1</div>
+              <p class="text-xs text-slate-400">Flipkart Minutes hyper-local delivery spiked 3.5x regular order volume.</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-blue-500/40 transition">
+              <div class="text-2xl font-extrabold text-blue-400 mb-1">20.1 Crore</div>
+              <div class="text-sm font-semibold text-white mb-1">Gen Z Visits (48 Hours)</div>
+              <p class="text-xs text-slate-400">Out of 60.6 crore total visits, 1 in 3 visitors came directly from the Gen Z demographic.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Head-to-Head Comparison Matrix -->
+  <section id="comparison" class="py-24 bg-slate-950/80 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs uppercase tracking-widest font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">The Matrix</span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-4">Direct Head-to-Head Dimension</h2>
+        <p class="text-slate-400 text-sm sm:text-base">Evaluation across 8 operational axes based on verified public releases, company disclosures, and analyst tracking.</p>
+      </div>
+
+      <!-- Filter / Search Tabs for Matrix -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8" id="filter-matrix-btns">
+        <button class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 text-white border border-white/20 transition-all hover:bg-white/20" data-category="all">All Dimensions</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-slate-400 border border-white/10 transition-all hover:text-white" data-category="customer">Customer & Reach</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-slate-400 border border-white/10 transition-all hover:text-white" data-category="product">Product & Commerce</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-slate-400 border border-white/10 transition-all hover:text-white" data-category="governance">Business & Transparency</button>
+      </div>
+
+      <!-- Comparison Table Card -->
+      <div class="glass-card rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse" id="comparison-table">
+            <thead>
+              <tr class="border-b border-white/10 bg-slate-900/70 text-xs font-extrabold uppercase tracking-widest text-slate-400">
+                <th class="py-5 px-6">Strategic Dimension</th>
+                <th class="py-5 px-6 text-amber-400"><i class="fa-brands fa-amazon mr-1.5"></i> Amazon GIF</th>
+                <th class="py-5 px-6 text-blue-400"><i class="fa-solid fa-bag-shopping mr-1.5"></i> Flipkart BBD</th>
+                <th class="py-5 px-6 text-center">Analyst Edge</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 text-sm text-slate-300 font-normal">
+              
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="customer">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span>Headline Pitch</span>
+                </td>
+                <td class="py-4 px-6">Premium upgrades, seller growth, high delivery speed</td>
+                <td class="py-4 px-6">Scale, Gen Z, beauty, viral lifestyle fashion</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Different, not better</span>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="customer">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                  <span>Membership Hook</span>
+                </td>
+                <td class="py-4 px-6">Prime 24h Early Access (7 Oct)</td>
+                <td class="py-4 px-6">Plus & Black 24h Early Access (8 Oct)</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Even</span>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="product">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span>Electronics & Premium</span>
+                </td>
+                <td class="py-4 px-6">Premium Android +70%, MacBook Neo 65x regular rate</td>
+                <td class="py-4 px-6">High smartphone legacy volume, rapid iPhone 17 delivery</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Slight Amazon on Messaging</span>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="product">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                  <span>Fashion & Beauty</span>
+                </td>
+                <td class="py-4 px-6">Nike 16x, footwear 7 pairs/second (Amazon Fashion)</td>
+                <td class="py-4 px-6">Beauty +42%, Gen Z +48%, Myntra integrated ecosystem</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">Flipkart Edge</span>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="product">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>Quick Commerce</span>
+                </td>
+                <td class="py-4 px-6">Amazon Now expanded to 120+ Indian cities</td>
+                <td class="py-4 px-6">Minutes: 3.5x regular orders, 11x new shoppers in hr 1</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Flipkart on Acquisition</span>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="governance">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span>Seller Ecosystem</span>
+                </td>
+                <td class="py-4 px-6">2x seller units in 24h, sellers > ₹1 Cr grew +80%</td>
+                <td class="py-4 px-6">Less emphasized in headline public communiques</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Amazon Edge</span>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="customer">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                  <span>Traffic & Audience</span>
+                </td>
+                <td class="py-4 px-6">276 Cr customer visits (2025), 70% from Tier-2/3 cities</td>
+                <td class="py-4 px-6">6.3M peak concurrent users/min; 20.1 Cr Gen Z visits</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">Flipkart for Youth</span>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition-colors" data-cat="governance">
+                <td class="py-4 px-6 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                  <span>Financial Transparency</span>
+                </td>
+                <td class="py-4 px-6">Percentage growth metrics; no audited absolute GMV</td>
+                <td class="py-4 px-6">Percentage growth metrics; no audited absolute GMV</td>
+                <td class="py-4 px-6 text-center">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-rose-500/10 text-rose-300 border border-rose-500/20">Neither Discloses</span>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <p class="text-xs text-slate-500 mt-4 text-center italic">* Note: "Analyst Edge" reflects the author's synthesis of publicly verifiable statements, not audited accounting reports.</p>
+    </div>
+  </section>
+
+  <!-- Interactive Data Visualizations & Charts -->
+  <section id="charts" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs uppercase tracking-widest font-bold text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full border border-blue-400/20">Data Visualizer</span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-4">Empirical Charts & Signals</h2>
+        <p class="text-slate-400 text-sm sm:text-base">Interactive visual breakdowns reconstructed directly from 2026 reports, Redseer estimates, and company releases.</p>
+      </div>
+
+      <!-- Chart Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        
+        <!-- Chart 1: Headline Growth Signals -->
+        <div class="glass-card rounded-3xl p-6 lg:p-8 border-white/10" data-tilt data-tilt-max="3">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-xl font-display font-bold text-white">Chart 1: Reported Growth Signals</h3>
+              <p class="text-xs text-slate-400">Percentage growth each platform chose to highlight for 2026</p>
+            </div>
+            <div class="flex items-center space-x-2 text-xs">
+              <span class="inline-flex items-center text-amber-400"><span class="w-3 h-3 rounded-sm bg-amber-500 mr-1"></span> Amazon</span>
+              <span class="inline-flex items-center text-blue-400"><span class="w-3 h-3 rounded-sm bg-blue-500 mr-1"></span> Flipkart</span>
+            </div>
+          </div>
+          <div class="relative h-72 w-full">
+            <canvas id="growthSignalsChart"></canvas>
+          </div>
+          <div class="mt-4 p-3 rounded-xl bg-white/5 text-xs text-slate-300">
+            <strong>Key Insight:</strong> Amazon's disclosures max out at +100% (Units & Seller Volume), while Flipkart chose to highlight niche vertical velocity (+48% Gen Z Beauty).
+          </div>
+        </div>
+
+        <!-- Chart 2: How Far Above a Normal Day -->
+        <div class="glass-card rounded-3xl p-6 lg:p-8 border-white/10" data-tilt data-tilt-max="3">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-xl font-display font-bold text-white">Chart 2: Multiple of a Normal Day</h3>
+              <p class="text-xs text-slate-400">Order surge vs GMV value surge across first 2 days (Redseer data)</p>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-mono">Base: 1x BAU</span>
+          </div>
+          <div class="relative h-72 w-full">
+            <canvas id="normalDayMultiplesChart"></canvas>
+          </div>
+          <div class="mt-4 p-3 rounded-xl bg-white/5 text-xs text-slate-300">
+            <strong>Key Insight:</strong> Orders jumped to <strong>14x normal</strong>, but GMV value rose by <strong>6x</strong>. Consumers purchased many more, lower-ticket and impulse items.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Chart 3: Qualitative Radar Scorecard -->
+      <div id="scorecard" class="glass-card rounded-3xl p-8 lg:p-12 border-white/10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-5">
+            <span class="text-xs uppercase tracking-widest font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">Qualitative Scorecard</span>
+            <h3 class="text-2xl lg:text-3xl font-display font-bold text-white mt-3 mb-3">8-Dimension Strategic Positioning</h3>
+            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+              A 1-to-5 analytical evaluation of market presence across eight strategic battlegrounds. Toggle and inspect how both platforms achieve symmetry in quick-commerce while diverging on audience and premiumisation.
+            </p>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-xs text-slate-300 font-semibold flex items-center">
+                  <span class="w-3 h-3 rounded-full bg-amber-500 mr-2"></span> Amazon Highest Dominance
+                </span>
+                <span class="text-xs font-bold text-amber-400">Premium Electronics & Sellers (5.0/5)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-xs text-slate-300 font-semibold flex items-center">
+                  <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span> Flipkart Highest Dominance
+                </span>
+                <span class="text-xs font-bold text-blue-400">Gen Z, Fashion & Scale (5.0/5)</span>
+              </div>
+              <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="text-xs text-slate-300 font-semibold flex items-center">
+                  <span class="w-3 h-3 rounded-full bg-emerald-500 mr-2"></span> Deadlock Parity
+                </span>
+                <span class="text-xs font-bold text-emerald-400">Quick Commerce Arms (4.0/5)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 flex justify-center">
+            <div class="w-full max-w-lg h-80 sm:h-96 relative">
+              <canvas id="scorecardRadarChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive 3D Quick-Commerce Speed Simulator -->
+  <section class="py-20 relative bg-gradient-to-b from-slate-950 to-slate-900 border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs uppercase tracking-widest font-bold text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20">The Delivery Race</span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-4">Quick Commerce: Minutes vs Now</h2>
+        <p class="text-slate-400 text-sm sm:text-base">Quick commerce has escalated from groceries into high-stake electronics delivery, recording sub-5 minute smartphone drops.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Speed Card Amazon -->
+        <div class="glass-card rounded-2xl p-7 border-amber-500/20 hover:border-amber-400/50 transition duration-300 group">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-truck-fast"></i>
+              </div>
+              <h4 class="text-xl font-display font-bold text-white">Amazon Now</h4>
+            </div>
+            <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full">120+ Cities Reach</span>
+          </div>
+          <p class="text-slate-300 text-sm leading-relaxed mb-6">
+            Leverages nationwide fulfillment dark stores to deliver festive gifting, appliances, and essential festive items within minutes to hours across metropolitan and tier-2 hubs.
+          </p>
+          <div class="w-full bg-slate-800 rounded-full h-3 mb-2 overflow-hidden">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-3 rounded-full transition-all duration-1000" style="width: 82%"></div>
+          </div>
+          <div class="flex justify-between text-xs text-slate-400 font-medium">
+            <span>Urban Geographical Footprint</span>
+            <span class="text-amber-400 font-bold">120+ Cities</span>
+          </div>
+        </div>
+
+        <!-- Speed Card Flipkart -->
+        <div class="glass-card rounded-2xl p-7 border-blue-500/20 hover:border-blue-400/50 transition duration-300 group">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-bolt-lightning"></i>
+              </div>
+              <h4 class="text-xl font-display font-bold text-white">Flipkart Minutes</h4>
+            </div>
+            <span class="text-xs font-bold text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full">3.4 Min Record iPhone</span>
+          </div>
+          <p class="text-slate-300 text-sm leading-relaxed mb-6">
+            Disrupted conventional e-commerce by dispatching iPhone 17 units in New Delhi in 3.4 minutes flat. Delivered 11x new customers in the opening hour of BBD.
+          </p>
+          <div class="w-full bg-slate-800 rounded-full h-3 mb-2 overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-1000" style="width: 95%"></div>
+          </div>
+          <div class="flex justify-between text-xs text-slate-400 font-medium">
+            <span>Peak Minute Velocity</span>
+            <span class="text-blue-400 font-bold">3.5x Normal Order Volume</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Lessons, Takeaways & Strategic Future -->
+  <section id="takeaways" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs uppercase tracking-widest font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">Executive Summary</span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white mt-3 mb-4">5 Strategic Takeaways</h2>
+        <p class="text-slate-400 text-sm sm:text-base">What founders, e-commerce operators, and investors can learn from the 2026 battle.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="glass-card rounded-2xl p-7 border-white/5 hover:border-amber-500/40 transition duration-300" data-tilt data-tilt-max="5">
+          <div class="text-amber-400 font-display font-black text-3xl mb-3">01</div>
+          <h4 class="text-lg font-display font-bold text-white mb-2">Demand Pull-Forward via Loyalty</h4>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Both Prime and Plus/Black early access prove that day 0/1 is where the war is waged. Early access locks consumer wallet share before rival sales open.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 border-white/5 hover:border-emerald-500/40 transition duration-300" data-tilt data-tilt-max="5">
+          <div class="text-emerald-400 font-display font-black text-3xl mb-3">02</div>
+          <h4 class="text-lg font-display font-bold text-white mb-2">Quick Commerce as Customer Acquisition</h4>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            No longer a grocery side feature. Quick commerce is the tip of the spear for delivering high-margin electronics and onboarding first-time shoppers at 11x rates.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 border-white/5 hover:border-blue-500/40 transition duration-300" data-tilt data-tilt-max="5">
+          <div class="text-blue-400 font-display font-black text-3xl mb-3">03</div>
+          <h4 class="text-lg font-display font-bold text-white mb-2">Tier-2/3 Is Where Growth Lives</h4>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Amazon’s 70% Tier-2 and Tier-3 visit share underscores that Indian festive expansion is overwhelmingly driven by non-metro aspiration and digital payment confidence.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 border-white/5 hover:border-purple-500/40 transition duration-300" data-tilt data-tilt-max="5">
+          <div class="text-purple-400 font-display font-black text-3xl mb-3">04</div>
+          <h4 class="text-lg font-display font-bold text-white mb-2">Narrative Strategy Over Product Parity</h4>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Both sell the same smartphones, but Amazon crafts a narrative around seller wealth and MacBook upgrades, while Flipkart curates Gen Z fashion, viral perfumes, and music culture.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 border-white/5 hover:border-rose-500/40 transition duration-300" data-tilt data-tilt-max="5">
+          <div class="text-rose-400 font-display font-black text-3xl mb-3">05</div>
+          <h4 class="text-lg font-display font-bold text-white mb-2">The Multiplier Paradox</h4>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Multipliers against a "regular day" are carefully handpicked by marketing departments to flatter metrics. Analysts must look at order-to-value compression (14x orders vs 6x GMV).
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-blue-500/10 flex flex-col justify-between" data-tilt data-tilt-max="5">
+          <div>
+            <div class="text-xs uppercase font-extrabold tracking-wider text-amber-400 mb-2">Analysis Verdict</div>
+            <h4 class="text-lg font-display font-bold text-white mb-2">Who Truly Won?</h4>
+            <p class="text-slate-300 text-xs leading-relaxed">
+              Without audited GMV releases, claiming a single winner is marketing fiction. Amazon won the premium basket, while Flipkart won the youth mindshare and traffic scale.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
+            <span>Prepared: 17 Oct 2026</span>
+            <i class="fa-solid fa-scale-balanced text-amber-400"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Limitations & Sources Accordion / Card -->
+      <div class="mt-16 glass-card rounded-3xl p-8 border-white/10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs text-slate-400">
+          <div>
+            <h5 class="text-sm font-bold text-white uppercase tracking-wider mb-2 flex items-center">
+              <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-2"></i> Methodology & Limitations
+            </h5>
+            <ul class="list-disc list-inside space-y-1.5 leading-relaxed">
+              <li>Final 2026 festive sales cycles were still concluding during authoring.</li>
+              <li>Reported figures are unaudited and use distinct bases (orders vs visits vs concurrency).</li>
+              <li>Aggregator press repetition was filtered against direct company releases and Redseer data.</li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-sm font-bold text-white uppercase tracking-wider mb-2 flex items-center">
+              <i class="fa-solid fa-book-open text-blue-400 mr-2"></i> Sources & Citations
+            </h5>
+            <p class="leading-relaxed">
+              YourStory ("Amazon, Flipkart see strong start to 2026 festive sales" & "Ecommerce firms sell ₹24k Cr: Redseer"); Zoutons India Festive Season Statistics 2026; DMI Finance Festive E-Commerce Review; Datum Intelligence E-Commerce Forecast.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Footer -->
+  <footer class="py-12 border-t border-white/10 text-center text-xs text-slate-500 relative bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-gradient-to-r from-amber-500 to-blue-500"></span>
+        <span class="text-slate-300 font-semibold">Festive E-Commerce Case Study 2026</span>
+      </div>
+      <div>
+        <span>Built with Three.js 3D Canvas, Chart.js, Tailwind CSS & Vanilla Tilt.</span>
+      </div>
+      <div class="flex space-x-4 text-slate-400">
+        <a href="#overview" class="hover:text-white transition">Top</a>
+        <a href="#comparison" class="hover:text-white transition">Matrix</a>
+        <a href="#charts" class="hover:text-white transition">Visuals</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // -------------------------------------------------------------
+    // 1. THREE.JS 3D BACKGROUND PARTICLES & MESH
+    // -------------------------------------------------------------
+    const canvas = document.getElementById('hero-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Create 3D Geometric Torus Knot & Dual Glowing Particles
+    const geometry = new THREE.TorusKnotGeometry(9, 2.5, 120, 24);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xff9900,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.12
+    });
+    const torusKnot = new THREE.Mesh(geometry, material);
+    scene.add(torusKnot);
+
+    // Particle Swarm (Amazon Amber + Flipkart Blue)
+    const particleCount = 450;
+    const posArray = new Float32Array(particleCount * 3);
+    const colorArray = new Float32Array(particleCount * 3);
+
+    const amberColor = new THREE.Color('#FF9900');
+    const blueColor = new THREE.Color('#2874F0');
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      posArray[i] = (Math.random() - 0.5) * 45;
+      posArray[i + 1] = (Math.random() - 0.5) * 45;
+      posArray[i + 2] = (Math.random() - 0.5) * 45;
+
+      const mixedColor = Math.random() > 0.5 ? amberColor : blueColor;
+      colorArray[i] = mixedColor.r;
+      colorArray[i + 1] = mixedColor.g;
+      colorArray[i + 2] = mixedColor.b;
+    }
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.18,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending
+    });
+
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    camera.position.z = 24;
+
+    // Mouse movement parallax
+    let mouseX = 0;
+    let mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) - 0.5;
+      mouseY = (e.clientY / window.innerHeight) - 0.5;
+    });
+
+    function animateThree() {
+      requestAnimationFrame(animateThree);
+
+      torusKnot.rotation.x += 0.002;
+      torusKnot.rotation.y += 0.003;
+      particlesMesh.rotation.y -= 0.001;
+
+      // Parallax smooth interpolation
+      camera.position.x += (mouseX * 4 - camera.position.x) * 0.05;
+      camera.position.y += (-mouseY * 4 - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
+
+      renderer.render(scene, camera);
+    }
+    animateThree();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // -------------------------------------------------------------
+    // 2. CHART.JS CONFIGURATIONS & INITIALIZATION
+    // -------------------------------------------------------------
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.font.family = '"Plus Jakarta Sans", sans-serif';
+
+    // Chart 1: Growth Signals Horizontal Bar
+    const ctx1 = document.getElementById('growthSignalsChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: [
+          'Amazon: Products Ordered YoY',
+          'Amazon: Seller Units (First 24h) YoY',
+          'Amazon: Sellers > ₹1 Cr YoY',
+          'Amazon: Premium Android Phones YoY',
+          'Flipkart: Beauty (Gen Z Shoppers)',
+          'Flipkart: Beauty (Overall Category)'
+        ],
+        datasets: [{
+          label: 'Published Growth Metric (%)',
+          data: [100, 100, 80, 70, 48, 42],
+          backgroundColor: [
+            'rgba(255, 153, 0, 0.85)',
+            'rgba(255, 153, 0, 0.85)',
+            'rgba(255, 153, 0, 0.7)',
+            'rgba(255, 153, 0, 0.7)',
+            'rgba(40, 116, 240, 0.85)',
+            'rgba(40, 116, 240, 0.7)'
+          ],
+          borderColor: [
+            '#FF9900',
+            '#FF9900',
+            '#FFB84D',
+            '#FFB84D',
+            '#2874F0',
+            '#60A5FA'
+          ],
+          borderWidth: 1.5,
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0f172a',
+            titleColor: '#fff',
+            bodyColor: '#cbd5e1',
+            borderColor: '#334155',
+            borderWidth: 1,
+            padding: 12,
+            callbacks: {
+              label: function(context) {
+                return ` Growth Claim: +${context.raw}%`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: {
+              callback: value => `+${value}%`
+            },
+            max: 120
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { size: 11, weight: '600' } }
+          }
+        }
+      }
+    });
+
+    // Chart 2: How Far Above Normal Day
+    const ctx2 = document.getElementById('normalDayMultiplesChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: [
+          'All Platforms: Orders Volume',
+          'All Platforms: Gross GMV Value',
+          'Quick Commerce: Sector GMV',
+          'Fashion Sector: GMV',
+          'Flipkart Minutes: Order Multiple'
+        ],
+        datasets: [{
+          label: 'Multiple of Regular Day (BAU = 1x)',
+          data: [14.0, 6.0, 4.5, 4.0, 3.5],
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.85)',
+            'rgba(245, 158, 11, 0.85)',
+            'rgba(16, 185, 129, 0.85)',
+            'rgba(168, 85, 247, 0.85)',
+            'rgba(236, 72, 153, 0.85)'
+          ],
+          borderRadius: 8,
+          borderWidth: 1.5,
+          borderColor: 'rgba(255, 255, 255, 0.2)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0f172a',
+            padding: 12,
+            callbacks: {
+              label: function(context) {
+                return ` Multiple: ${context.raw}x normal day`;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: {
+              callback: value => `${value}x`
+            },
+            max: 16
+          },
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 11 } }
+          }
+        }
+      }
+    });
+
+    // Chart 3: Qualitative Radar Scorecard
+    const ctx3 = document.getElementById('scorecardRadarChart').getContext('2d');
+    new Chart(ctx3, {
+      type: 'radar',
+      data: {
+        labels: [
+          'Premium Electronics',
+          'Smartphone Deals',
+          'Fashion & Beauty',
+          'Quick Commerce',
+          'Seller Ecosystem',
+          'Tier-2/3 Reach',
+          'Gen Z Engagement',
+          'Traffic Concurrency'
+        ],
+        datasets: [
+          {
+            label: 'Amazon GIF',
+            data: [5, 4, 3, 4, 5, 5, 3, 4],
+            backgroundColor: 'rgba(255, 153, 0, 0.25)',
+            borderColor: '#FF9900',
+            pointBackgroundColor: '#FF9900',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#FF9900',
+            borderWidth: 2
+          },
+          {
+            label: 'Flipkart BBD',
+            data: [4, 5, 5, 4, 3, 4, 5, 5],
+            backgroundColor: 'rgba(40, 116, 240, 0.25)',
+            borderColor: '#2874F0',
+            pointBackgroundColor: '#2874F0',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#2874F0',
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        elements: {
+          line: { tension: 0.2 }
+        },
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+            grid: { color: 'rgba(255, 255, 255, 0.08)' },
+            pointLabels: {
+              font: { size: 11, weight: '600' },
+              color: '#e2e8f0'
+            },
+            ticks: {
+              backdropColor: 'transparent',
+              color: '#64748b',
+              stepSize: 1,
+              min: 0,
+              max: 5
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: '#cbd5e1',
+              font: { weight: 'bold' }
+            }
+          }
+        }
+      }
+    });
+
+    // -------------------------------------------------------------
+    // 3. TABLE FILTERING FUNCTIONALITY
+    // -------------------------------------------------------------
+    const filterButtons = document.querySelectorAll('#filter-matrix-btns button');
+    const tableRows = document.querySelectorAll('#comparison-table tbody tr');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('active', 'bg-white/10', 'text-white', 'border-white/20');
+          b.classList.add('bg-white/5', 'text-slate-400', 'border-white/10');
+        });
+
+        btn.classList.add('active', 'bg-white/10', 'text-white', 'border-white/20');
+        btn.classList.remove('bg-white/5', 'text-slate-400', 'border-white/10');
+
+        const filter = btn.getAttribute('data-category');
+        tableRows.forEach(row => {
+          if (filter === 'all' || row.getAttribute('data-cat') === filter) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // -------------------------------------------------------------
+    // 4. ANIMATED STAT COUNTERS ON LOAD
+    // -------------------------------------------------------------
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+      const target = +counter.getAttribute('data-target');
+      let count = 0;
+      const step = target / 60;
+      const updateCount = () => {
+        count += step;
+        if (count < target) {
+          counter.innerText = '₹' + Math.ceil(count).toLocaleString('en-IN') + ' Cr';
+          requestAnimationFrame(updateCount);
+        } else {
+          counter.innerText = '₹' + target.toLocaleString('en-IN') + ' Cr';
+        }
+      };
+      updateCount();
+    });
+
+    // -------------------------------------------------------------
+    // 5. NAV SCROLL EFFECT
+    // -------------------------------------------------------------
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        nav.classList.add('py-1', 'shadow-2xl');
+      } else {
+        nav.classList.remove('py-1', 'shadow-2xl');
+      }
+    });
+
+  </script>
+</body>
+</html>
